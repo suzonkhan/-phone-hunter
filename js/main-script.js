@@ -1,14 +1,15 @@
 let searchField = document.getElementById("search-field");
 let userGuide = document.getElementById("user-guide-wrapper");
 let searchKeyword = "";
+
 toggleElament = (elementID, display) => {
     document.getElementById(elementID).style.display = display;
 }
-
+// Action on search button
 document.getElementById("search-btn").addEventListener("click", ()=> {
     toggleElament("pre-loader", "flex");
     toggleElament("phone-details", "none");
-    let searchKeyword = searchField.value;
+    let searchKeyword = searchField.value.toLowerCase();
     if(searchKeyword.length > 0){
         loadPhones(searchKeyword, 20)
     } else{
@@ -17,10 +18,12 @@ document.getElementById("search-btn").addEventListener("click", ()=> {
         toggleElament("pre-loader", "none");
     }
 });
+// Action on load more button
 document.getElementById("load-all").addEventListener("click", ()=> {
-    loadPhones(searchField.value, -1);
+    loadPhones(searchField.value.toLowerCase(), -1);
 });
 
+// Fetch data into both case return as array
 loadPhones = (searchKeyword, limit) =>{
     const searchURL = `https://openapi.programming-hero.com/api/phones?search=${searchKeyword}`;
     fetch(searchURL)
@@ -36,9 +39,9 @@ loadPhones = (searchKeyword, limit) =>{
     
 }
 
-
+// Dispplay fetched data into card
 displayPhone = (phones) =>{
-    console.log(phones.length);
+
     if(phones.length === 0){
         userGuide.innerHTML = "Not Fount. Please search with diffrent keyword";
         userGuide.style.color = "red";
@@ -46,8 +49,7 @@ displayPhone = (phones) =>{
     } else{
         toggleElament("user-guide-wrapper", "none")
     } 
-   
-    // searchField.value = ""; 
+
     const resultWrapper = document.getElementById("result-wrapper");
     resultWrapper.innerHTML = "";   
     
@@ -70,13 +72,14 @@ displayPhone = (phones) =>{
     });
 }
 
+// Fetched single data
 phoneDetails = (phoneSlug) =>{
     const detailsURL = `https://openapi.programming-hero.com/api/phone/${phoneSlug}`;
     fetch(detailsURL)
     .then(response => response.json())
     .then(apiData => showPhoneDetails(apiData.data)) 
 }
-
+// Display single data
 showPhoneDetails = (phone) =>{
    const detailsWrapper =  document.getElementById("phone-details");
    detailsWrapper.innerText ="";
@@ -117,7 +120,7 @@ showPhoneDetails = (phone) =>{
         toggleElament("phone-details", "block");
         window.scrollTo(0, 210);
 }
-
+// Display single data's array and object
 showListItem = (data, documentID) => {
     if(Array.isArray(data)){
         data.forEach(sensor => {
