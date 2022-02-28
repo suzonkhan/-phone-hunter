@@ -1,5 +1,6 @@
 document.getElementById("search-btn").addEventListener("click", function(){
-   
+    toggleElament("pre-loader", "flex");
+    toggleElament("phone-details", "none");
     // let searchKeyword = "Phone";
     let searchKeyword = document.getElementById("search-field").value;
     const searchURL = `https://openapi.programming-hero.com/api/phones?search=${searchKeyword}`;
@@ -16,10 +17,11 @@ document.getElementById("search-btn").addEventListener("click", function(){
     */  
 });
 function displayPhone(phones){
-    toggleElament("pre-loader", "flex");
-    
     if(!phones.length > 0){
         document.getElementById("user-guide-wrapper").innerHTML = "Please search with diffrent keyword";
+        toggleElament("pre-loader", "none");
+    } else{
+        toggleElament("user-guide-wrapper", "none");
     } 
     limitedPhones = phones.splice(0, 20);
     console.log(limitedPhones);    
@@ -32,7 +34,7 @@ function displayPhone(phones){
         div.classList.add("col-md-3");
         const innerContent = ` 
         <div class='card mb-3'>
-            <div class='card-body'>
+            <div class='card-body text-center'>
                 <img src="${phone.image}"/>
                 <h4 class="my-2">   ${phone.phone_name}</h4>
                 <p> Brand: ${phone.brand}</p>
@@ -79,13 +81,12 @@ function showPhoneDetails(phone) {
         <div class="col-md-8"> 
                 <h2>${phone.name}</h2>
                 <p>Brand: ${phone.brand ? phone.brand : "Unknown"}</p>
-                <p>Release Date: ${phone.releaseDate ? phone.releaseDate : "Unknown"}</p> 
+                <p> ${phone.releaseDate ? phone.releaseDate : ""}</p> 
                 <div class="main-features">
                     <h4>Main Features</h4>
                     <ul id="features-list"></ul>
                     <h5>Sensors</h5>
                     <ul id="sensors-list"> </ul>
-
                 </div>
                 <div class="others-features">
                 <h5>Others</h5>
@@ -103,6 +104,8 @@ function showPhoneDetails(phone) {
         showListItem(phone.mainFeatures.sensors, "sensors-list");
         showListItem(phone.mainFeatures, "features-list");
         showListItem(phone.others, "others-list");
+        toggleElament("phone-details", "block");
+        window.scrollTo(0, 210);
 }
 
 function showListItem(data, documentID) {
