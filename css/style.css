@@ -62,3 +62,7 @@ body{
         width: 100%;
     }
 }
+#load-all{
+    display: none;
+    margin: 0 auto;
+}

@@ -1,37 +1,56 @@
 let searchField = document.getElementById("search-field");
 let userGuide = document.getElementById("user-guide-wrapper");
+let searchKeyword = "";
+toggleElament = (elementID, display) => {
+    document.getElementById(elementID).style.display = display;
+}
 
-document.getElementById("search-btn").addEventListener("click", function(){
+document.getElementById("search-btn").addEventListener("click", ()=> {
     toggleElament("pre-loader", "flex");
     toggleElament("phone-details", "none");
-
     let searchKeyword = searchField.value;
-    const searchURL = `https://openapi.programming-hero.com/api/phones?search=${searchKeyword}`;
     if(searchKeyword.length > 0){
-        fetch(searchURL)
-        .then(response => response.json())
-        .then(ApiData => displayPhone(ApiData.data))
+        loadPhones(searchKeyword, 20)
     } else{
         userGuide.innerHTML = "Please use any keywork for search";
         userGuide.style.color = "red";
         toggleElament("pre-loader", "none");
     }
 });
-function displayPhone(phones){
+document.getElementById("load-all").addEventListener("click", ()=> {
+    loadPhones(searchField.value, -1);
+});
+
+loadPhones = (searchKeyword, limit) =>{
+    const searchURL = `https://openapi.programming-hero.com/api/phones?search=${searchKeyword}`;
+    fetch(searchURL)
+    .then(response => response.json())
+    .then(ApiData => {
+        if(ApiData.data.length > 20){
+            toggleElament("load-all", "block"); 
+        } else{
+            toggleElament("load-all", "none"); 
+        }  
+        displayPhone(ApiData.data.slice(0, limit)) 
+    })
+    
+}
+
+
+displayPhone = (phones) =>{
     if(!phones.length > 0){
-        
         userGuide.innerHTML = "Please search with diffrent keyword";
         userGuide.style.color = "red";
         toggleElament("pre-loader", "none");
     } else{
-        toggleElament("user-guide-wrapper", "none");
+        toggleElament("user-guide-wrapper", "none")
     } 
-    limitedPhones = phones.splice(0, 20);
-    searchField.value = ""; 
+   
+    // searchField.value = ""; 
     const resultWrapper = document.getElementById("result-wrapper");
     resultWrapper.innerHTML = "";   
     
-    limitedPhones.forEach(phone => {
+    phones.forEach(phone => {
         const div = document.createElement("div");
         div.classList.add("col-md-3");
         const innerContent = ` 
@@ -49,17 +68,15 @@ function displayPhone(phones){
         toggleElament("pre-loader", "none");
     });
 }
-function toggleElament(elementID, display) {
-    document.getElementById(elementID).style.display = display;
-}
-function phoneDetails(phoneSlug) {
+
+phoneDetails = (phoneSlug) =>{
     const detailsURL = `https://openapi.programming-hero.com/api/phone/${phoneSlug}`;
     fetch(detailsURL)
     .then(response => response.json())
     .then(apiData => showPhoneDetails(apiData.data)) 
 }
 
-function showPhoneDetails(phone) {
+showPhoneDetails = (phone) =>{
    const detailsWrapper =  document.getElementById("phone-details");
    detailsWrapper.innerText ="";
    const div = document.createElement("div");
@@ -73,7 +90,7 @@ function showPhoneDetails(phone) {
         <div class="col-md-8"> 
                 <h2>${phone.name}</h2>
                 <p>Brand: ${phone.brand ? phone.brand : "Unknown"}</p>
-                <p> ${phone.releaseDate ? phone.releaseDate : ""}</p> 
+                <p> ${phone.releaseDate ? phone.releaseDate : "Release date not found"}</p> 
                 <div class="main-features">
                     <h4>Main Features</h4>
                     <ul id="features-list"></ul>
@@ -100,7 +117,7 @@ function showPhoneDetails(phone) {
         window.scrollTo(0, 210);
 }
 
-function showListItem(data, documentID) {
+showListItem = (data, documentID) => {
     if(Array.isArray(data)){
         data.forEach(sensor => {
             let listItem = document.createElement("li");
