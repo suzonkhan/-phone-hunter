@@ -1,9 +1,7 @@
 body{
     background-color: #f5f5f5;
 }
-#user-guide-wrapper{
-    /* display: none; */
-}
+
 .pre-loader{
     display: none;
     align-items: center;
