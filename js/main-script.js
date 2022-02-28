@@ -38,8 +38,9 @@ loadPhones = (searchKeyword, limit) =>{
 
 
 displayPhone = (phones) =>{
-    if(!phones.length > 0){
-        userGuide.innerHTML = "Please search with diffrent keyword";
+    console.log(phones.length);
+    if(phones.length === 0){
+        userGuide.innerHTML = "Not Fount. Please search with diffrent keyword";
         userGuide.style.color = "red";
         toggleElament("pre-loader", "none");
     } else{
