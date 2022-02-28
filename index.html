@@ -10,7 +10,7 @@
 </head>
 <body>
     <section>
-        <div class="container bg-white vh-100">
+        <div class="container bg-white min-vh-100">
             <div class="row">
                 <div class="col">
                     <h1 class="my-5 text-center">Phone Gallery</h1>
@@ -18,10 +18,37 @@
                 <!-- col -->
             </div>
             <!-- row -->
-            
+            <div class="row">
+                <div class="col-md-5 offset-md-3"> 
+                    <input id="search-field" type="text" class="form-control"  placeholder="Search...">
+                </div>
+                <!-- col --> 
+                  <div class="col-md-3">
+                    <button id="search-btn" type="submit" class="btn btn-primary mb-3">Search</button>
+                  </div>
+            </div>
+            <!-- row -->
+            <div id="phone-details" class=""> </div>
+            <!-- row -->
+            <div id="result-wrapper" class="row">
+               
+            </div>
+            <!-- row -->
+            <div id="user-guide-wrapper" class="text-center">
+                
+              <p>Please search your phone. </p>
+                
+            </div>
+            <!-- row -->
+                   
         </div>
         <!-- CONTAINER -->
     </section>
+    <div id="pre-loader" class="pre-loader">
+    <div>
+        <span></span>
+    </div>
+    </div>
     <script src="js/main-script.js"></script>
 </body>
 </html>
