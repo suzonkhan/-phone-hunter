@@ -45,6 +45,7 @@ body{
     padding: 6px 12px;
     border: 1px solid #f5f5f5;
     margin: 2px;
+    text-transform: uppercase;
 }
 #phone-details img{
     transition: 0.2s;

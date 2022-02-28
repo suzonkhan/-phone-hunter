@@ -1,35 +1,37 @@
+let searchField = document.getElementById("search-field");
+let userGuide = document.getElementById("user-guide-wrapper");
+
 document.getElementById("search-btn").addEventListener("click", function(){
     toggleElament("pre-loader", "flex");
     toggleElament("phone-details", "none");
-    // let searchKeyword = "Phone";
-    let searchKeyword = document.getElementById("search-field").value;
+
+    let searchKeyword = searchField.value;
     const searchURL = `https://openapi.programming-hero.com/api/phones?search=${searchKeyword}`;
-    // console.log(searchURL);
-
-    fetch(searchURL)
-    .then(response => response.json())
-    .then(ApiData => displayPhone(ApiData.data))
-    /*
-    Phone Search
-    URL Format: https://openapi.programming-hero.com/api/phones?search=${searchText}
-
-    Example: https://openapi.programming-hero.com/api/phones?search=iphone
-    */  
+    if(searchKeyword.length > 0){
+        fetch(searchURL)
+        .then(response => response.json())
+        .then(ApiData => displayPhone(ApiData.data))
+    } else{
+        userGuide.innerHTML = "Please use any keywork for search";
+        userGuide.style.color = "red";
+        toggleElament("pre-loader", "none");
+    }
 });
 function displayPhone(phones){
     if(!phones.length > 0){
-        document.getElementById("user-guide-wrapper").innerHTML = "Please search with diffrent keyword";
+        
+        userGuide.innerHTML = "Please search with diffrent keyword";
+        userGuide.style.color = "red";
         toggleElament("pre-loader", "none");
     } else{
         toggleElament("user-guide-wrapper", "none");
     } 
     limitedPhones = phones.splice(0, 20);
-    console.log(limitedPhones);    
+    searchField.value = ""; 
     const resultWrapper = document.getElementById("result-wrapper");
     resultWrapper.innerHTML = "";   
     
     limitedPhones.forEach(phone => {
-        // console.log(phone.phone_name);
         const div = document.createElement("div");
         div.classList.add("col-md-3");
         const innerContent = ` 
@@ -51,26 +53,16 @@ function toggleElament(elementID, display) {
     document.getElementById(elementID).style.display = display;
 }
 function phoneDetails(phoneSlug) {
-const detailsURL = `https://openapi.programming-hero.com/api/phone/${phoneSlug}`;
-console.log(detailsURL);
-     /*
-    https://openapi.programming-hero.com/api/phone/${id}
-     Phone detail url:
-    URL Format: 
-
-    Example: https://openapi.programming-hero.com/api/phone/apple_iphone_13_pro_max-11089
-     */
-fetch(detailsURL)
+    const detailsURL = `https://openapi.programming-hero.com/api/phone/${phoneSlug}`;
+    fetch(detailsURL)
     .then(response => response.json())
-    .then(apiData => showPhoneDetails(apiData.data))
-    
+    .then(apiData => showPhoneDetails(apiData.data)) 
 }
-function showPhoneDetails(phone) {
 
+function showPhoneDetails(phone) {
    const detailsWrapper =  document.getElementById("phone-details");
    detailsWrapper.innerText ="";
    const div = document.createElement("div");
-       
         const innerContent = ` 
         <div class='card my-5'>
         <div class='card-body p-4'>
@@ -124,5 +116,4 @@ function showListItem(data, documentID) {
             document.getElementById(documentID).appendChild(listItem)
         }
     }
-    
 }
